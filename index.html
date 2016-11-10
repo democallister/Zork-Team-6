@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Zork-team-6 by democallister</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Zork-team-6</h1>
+      <h2 class="project-tagline">The big project for CPSC 240</h2>
+      <a href="https://github.com/democallister/Zork-Team-6" class="btn">View on GitHub</a>
+      <a href="https://github.com/democallister/Zork-Team-6/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/democallister/Zork-Team-6/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="zork-team-6" class="anchor" href="#zork-team-6" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Zork-Team-6</h1>
+
+<p>The big project for CPSC 240</p>
+
+<p>/**</p>
+
+<ul>
+<li>Abstract class for multiple command types</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, Ryan, David</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group project 2
+*/
+abstract class Command {</p>
+
+<p>abstract String execute();</p>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Takes commands from user input and determines what kind of command it is, then calls an execution method for that particular command.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/
+public class CommandFactory {</p>
+
+<p>private static CommandFactory theInstance;
+public static List MOVEMENT_COMMANDS = 
+    Arrays.asList("n","w","e","s","u","d" );
+/**</p>
+
+<ul>
+<li>Instance method for the singleton class</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> CommandFactory - the instance of one command
+*/
+public static synchronized CommandFactory instance() {
+if (theInstance == null) {
+    theInstance = new CommandFactory();
+}
+return theInstance;
+}</li>
+</ul>
+
+<p>private CommandFactory() {
+}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Takes an input from the user and determines what kind of command it is, then returns that command</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> String the command input</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> SaveCommand - command to save the game</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> TakeCommand - command to pick up an item</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> DropCommand - command to remove an item from the player’s inventory</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> InventoryCommand - displays the player’s inventory</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> MovementCommand - command to move to a different room</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> ItemSpecificCommand - command to perform an action on an item</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> UnknownCommand - unrecognized command
+*/
+public Command parse(String command) {
+String parts[] = command.split(" ");
+String verb = parts[0];
+String noun = parts.length &gt;= 2 ? parts[1] : "";
+if (verb.equals("save")) {
+    return new SaveCommand(noun);
+}
+if (verb.equals("take")) {
+    return new TakeCommand(noun);
+}
+if (verb.equals("drop")) {
+    return new DropCommand(noun);
+}
+if (verb.equals("i") || verb.equals("inventory")) {
+    return new InventoryCommand();
+}
+if (MOVEMENT_COMMANDS.contains(verb)) {
+    return new MovementCommand(verb);
+}
+if (parts.length == 2) {
+    return new ItemSpecificCommand(verb, noun);
+}
+return new UnknownCommand(command);
+}
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Command for transforming multiple items into a different item</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> David, Scott, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/
+public class CraftCommand extends Command {</p>
+
+<p>public CraftCommand(){
+}</p>
+
+<pre><code>/**
+ * Checks to see if the player has both the specified items
+ * removes them from the player’s inventory and adds the crafted item if they are both present
+ * notifies the player that they do not have the necessary items if they are not
+ * @return String - affirmation that the items have been crafted
+ * @return String - Notice that the player does not have the necessary items
+ */
+</code></pre>
+
+<p><a href="https://github.com/Override" class="user-mention">@Override</a>
+String execute() {
+    return null;
+}</p>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>/** </p>
+
+<ul>
+<li>command to remove an item from the player’s inventory</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> David, Scott, Ryan</li>
+<li>
+<a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/</li>
+</ul>
+
+<p>class DropCommand extends Command {</p>
+
+<pre><code>private String itemName;
+
+DropCommand(String itemName) {
+    this.itemName = itemName;
+}
+/**
+ * Checks to see if the specified item is in the players inventory
+ * removes it if it is, prints a message stating they do not have the item if it is not
+ * @return String - affirmation that the item was dropped
+ * @return String - Notice that the player does not have the item
+ */
+public String execute() {
+    if (itemName == null || itemName.trim().length() == 0) {
+        return "Drop what?\n";
+    }
+    try {
+        Item theItem = GameState.instance().getItemFromInventoryNamed(
+            itemName);
+        GameState.instance().removeFromInventory(theItem);
+        GameState.instance().getAdventurersCurrentRoom().add(theItem);
+        return itemName + " dropped.\n";
+    } catch (Item.NoItemException e) {
+        return "You don't have a " + itemName + ".\n";
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>import java.util.Hashtable;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;</p>
+
+<p>public class Dungeon {</p>
+
+<pre><code>public static class IllegalDungeonFormatException extends Exception {
+    public IllegalDungeonFormatException(String e) {
+        super(e);
+    }
+}
+
+// Variables relating to both dungeon file and game state storage.
+public static String TOP_LEVEL_DELIM = "===";
+public static String SECOND_LEVEL_DELIM = "---";
+
+// Variables relating to dungeon file (.bork) storage.
+public static String ROOMS_MARKER = "Rooms:";
+public static String EXITS_MARKER = "Exits:";
+public static String ITEMS_MARKER = "Items:";
+
+// Variables relating to game state (.sav) storage.
+static String FILENAME_LEADER = "Dungeon file: ";
+static String ROOM_STATES_MARKER = "Room states:";
+
+private String name;
+private Room entry;
+private Hashtable&lt;String,Room&gt; rooms;
+private Hashtable&lt;String,Item&gt; items;
+private String filename;
+
+Dungeon(String name, Room entry) {
+    init();
+    this.filename = null;    // null indicates not hydrated from file.
+    this.name = name;
+    this.entry = entry;
+    rooms = new Hashtable&lt;String,Room&gt;();
+}
+
+/**
+ * Read from the .bork filename passed, and instantiate a Dungeon object
+ * based on it.
+ */
+public Dungeon(String filename) throws FileNotFoundException, 
+    IllegalDungeonFormatException {
+
+    this(filename, true);
+}
+
+/**
+ * Read from the .bork filename passed, and instantiate a Dungeon object
+ * based on it, including (possibly) the items in their original locations.
+ */
+public Dungeon(String filename, boolean initState) 
+    throws FileNotFoundException, IllegalDungeonFormatException {
+
+    init();
+    this.filename = filename;
+
+    Scanner s = new Scanner(new FileReader(filename));
+    name = s.nextLine();
+
+    s.nextLine();   // Throw away version indicator.
+
+    // Throw away delimiter.
+    if (!s.nextLine().equals(TOP_LEVEL_DELIM)) {
+        throw new IllegalDungeonFormatException("No '" +
+            TOP_LEVEL_DELIM + "' after version indicator.");
+    }
+
+    // Throw away Items starter.
+    if (!s.nextLine().equals(ITEMS_MARKER)) {
+        throw new IllegalDungeonFormatException("No '" +
+            ITEMS_MARKER + "' line where expected.");
+    }
+
+    try {
+        // Instantiate items.
+        while (true) {
+            add(new Item(s));
+        }
+    } catch (Item.NoItemException e) {  /* end of items */ }
+
+    // Throw away Rooms starter.
+    if (!s.nextLine().equals(ROOMS_MARKER)) {
+        throw new IllegalDungeonFormatException("No '" +
+            ROOMS_MARKER + "' line where expected.");
+    }
+
+    try {
+        // Instantiate and add first room (the entry).
+        entry = new Room(s, this, initState);
+        add(entry);
+
+        // Instantiate and add other rooms.
+        while (true) {
+            add(new Room(s, this, initState));
+        }
+    } catch (Room.NoRoomException e) {  /* end of rooms */ }
+
+    // Throw away Exits starter.
+    if (!s.nextLine().equals(EXITS_MARKER)) {
+        throw new IllegalDungeonFormatException("No '" +
+            EXITS_MARKER + "' line where expected.");
+    }
+
+    try {
+        // Instantiate exits.
+        while (true) {
+            Exit exit = new Exit(s, this);
+        }
+    } catch (Exit.NoExitException e) {  /* end of exits */ }
+
+    s.close();
+}
+
+// Common object initialization tasks, regardless of which constructor
+// is used.
+private void init() {
+    rooms = new Hashtable&lt;String,Room&gt;();
+    items = new Hashtable&lt;String,Item&gt;();
+}
+
+/*
+ * Store the current (changeable) state of this dungeon to the writer
+ * passed.
+ */
+void storeState(PrintWriter w) throws IOException {
+    w.println(FILENAME_LEADER + getFilename());
+    w.println(ROOM_STATES_MARKER);
+    for (Room room : rooms.values()) {
+        room.storeState(w);
+    }
+    w.println(TOP_LEVEL_DELIM);
+}
+
+/*
+ * Restore the (changeable) state of this dungeon to that reflected in the
+ * reader passed.
+ */
+void restoreState(Scanner s) throws GameState.IllegalSaveFormatException {
+
+    // Note: the filename has already been read at this point.
+
+    if (!s.nextLine().equals(ROOM_STATES_MARKER)) {
+        throw new GameState.IllegalSaveFormatException("No '" +
+            ROOM_STATES_MARKER + "' after dungeon filename in save file.");
+    }
+
+    String roomName = s.nextLine();
+    while (!roomName.equals(TOP_LEVEL_DELIM)) {
+        getRoom(roomName.substring(0,roomName.length()-1)).
+            restoreState(s, this);
+        roomName = s.nextLine();
+    }
+}
+
+public Room getEntry() { return entry; }
+public String getName() { return name; }
+public String getFilename() { return filename; }
+public void add(Room room) { rooms.put(room.getTitle(),room); }
+public void add(Item item) { items.put(item.getPrimaryName(),item); }
+
+public Room getRoom(String roomTitle) {
+    return rooms.get(roomTitle);
+}
+
+/**
+ * Get the Item object whose primary name is passed. This has nothing to
+ * do with where the Adventurer might be, or what's in his/her inventory,
+ * etc.
+ */
+public Item getItem(String primaryItemName) throws Item.NoItemException {
+
+    if (items.get(primaryItemName) == null) {
+        throw new Item.NoItemException();
+    }
+    return items.get(primaryItemName);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public class Event {</p>
+
+<pre><code>private String eventName;
+
+public Event(String eventName){
+}
+
+String execute(){
+    return null;
+}
+
+String determineType(){
+    return null;
+}
+
+private void deathEvent(){}
+
+private void scoreEvent(){}
+
+private void woundEvent(){}
+
+private void teleportEvent(){}
+
+private void disappearEvent(){}
+
+private void transformEvent(){}
+
+private void winEvent(){}
+
+}
+</code></pre>
+
+<p>import java.util.Scanner;</p>
+
+<p>public class Exit {</p>
+
+<pre><code>class NoExitException extends Exception {}
+
+private String dir;
+private Room src, dest;
+
+Exit(String dir, Room src, Room dest) {
+    init();
+    this.dir = dir;
+    this.src = src;
+    this.dest = dest;
+    src.addExit(this);
+}
+
+/** Given a Scanner object positioned at the beginning of an "exit" file
+    entry, read and return an Exit object representing it. 
+    @param d The dungeon that contains this exit (so that Room objects 
+    may be obtained.)
+    @throws NoExitException The reader object is not positioned at the
+    start of an exit entry. A side effect of this is the reader's cursor
+    is now positioned one line past where it was.
+    @throws IllegalDungeonFormatException A structural problem with the
+    dungeon file itself, detected when trying to read this room.
+ */
+Exit(Scanner s, Dungeon d) throws NoExitException,
+    Dungeon.IllegalDungeonFormatException {
+
+    init();
+    String srcTitle = s.nextLine();
+    if (srcTitle.equals(Dungeon.TOP_LEVEL_DELIM)) {
+        throw new NoExitException();
+    }
+    src = d.getRoom(srcTitle);
+    dir = s.nextLine();
+    dest = d.getRoom(s.nextLine());
+
+    // I'm an Exit object. Great. Add me as an exit to my source Room too,
+    // though.
+    src.addExit(this);
+
+    // throw away delimiter
+    if (!s.nextLine().equals(Dungeon.SECOND_LEVEL_DELIM)) {
+        throw new Dungeon.IllegalDungeonFormatException("No '" +
+            Dungeon.SECOND_LEVEL_DELIM + "' after exit.");
+    }
+}
+
+// Common object initialization tasks.
+private void init() {
+}
+
+String describe() {
+    return "You can go " + dir + " to " + dest.getTitle() + ".";
+}
+
+String getDir() { return dir; }
+Room getSrc() { return src; }
+Room getDest() { return dest; }
+</code></pre>
+
+<p>}</p>
+
+<p>import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;</p>
+
+<p>public class GameState {</p>
+
+<pre><code>public static class IllegalSaveFormatException extends Exception {
+    public IllegalSaveFormatException(String e) {
+        super(e);
+    }
+}
+
+static String DEFAULT_SAVE_FILE = "bork_save";
+static String SAVE_FILE_EXTENSION = ".sav";
+static String SAVE_FILE_VERSION = "Bork v3.0 save data";
+
+static String ADVENTURER_MARKER = "Adventurer:";
+static String CURRENT_ROOM_LEADER = "Current room: ";
+static String INVENTORY_LEADER = "Inventory: ";
+
+private static GameState theInstance;
+private Dungeon dungeon;
+private ArrayList&lt;Item&gt; inventory;
+private Room adventurersCurrentRoom;
+
+static synchronized GameState instance() {
+    if (theInstance == null) {
+        theInstance = new GameState();
+    }
+    return theInstance;
+}
+
+private GameState() {
+    inventory = new ArrayList&lt;Item&gt;();
+}
+
+void restore(String filename) throws FileNotFoundException,
+    IllegalSaveFormatException, Dungeon.IllegalDungeonFormatException {
+
+    Scanner s = new Scanner(new FileReader(filename));
+
+    if (!s.nextLine().equals(SAVE_FILE_VERSION)) {
+        throw new IllegalSaveFormatException("Save file not compatible.");
+    }
+
+    String dungeonFileLine = s.nextLine();
+
+    if (!dungeonFileLine.startsWith(Dungeon.FILENAME_LEADER)) {
+        throw new IllegalSaveFormatException("No '" +
+            Dungeon.FILENAME_LEADER + 
+            "' after version indicator.");
+    }
+
+    dungeon = new Dungeon(dungeonFileLine.substring(
+        Dungeon.FILENAME_LEADER.length()), false);
+    dungeon.restoreState(s);
+
+    s.nextLine();  // Throw away "Adventurer:".
+    String currentRoomLine = s.nextLine();
+    adventurersCurrentRoom = dungeon.getRoom(
+        currentRoomLine.substring(CURRENT_ROOM_LEADER.length()));
+    if (s.hasNext()) {
+        String inventoryList = s.nextLine().substring(
+            INVENTORY_LEADER.length());
+        String[] inventoryItems = inventoryList.split(",");
+        for (String itemName : inventoryItems) {
+            try {
+                addToInventory(dungeon.getItem(itemName));
+            } catch (Item.NoItemException e) {
+                throw new IllegalSaveFormatException("No such item '" +
+                    itemName + "'");
+            }
+        }
+    }
+}
+
+void store() throws IOException {
+    store(DEFAULT_SAVE_FILE);
+}
+
+void store(String saveName) throws IOException {
+    String filename = saveName + SAVE_FILE_EXTENSION;
+    PrintWriter w = new PrintWriter(new FileWriter(filename));
+    w.println(SAVE_FILE_VERSION);
+    dungeon.storeState(w);
+    w.println(ADVENTURER_MARKER);
+    w.println(CURRENT_ROOM_LEADER + adventurersCurrentRoom.getTitle());
+    if (inventory.size() &gt; 0) {
+        w.print(INVENTORY_LEADER);
+        for (int i=0; i&lt;inventory.size()-1; i++) {
+            w.print(inventory.get(i).getPrimaryName() + ",");
+        }
+        w.println(inventory.get(inventory.size()-1).getPrimaryName());
+    }
+    w.close();
+}
+
+void initialize(Dungeon dungeon) {
+    this.dungeon = dungeon;
+    adventurersCurrentRoom = dungeon.getEntry();
+}
+
+ArrayList&lt;String&gt; getInventoryNames() {
+    ArrayList&lt;String&gt; names = new ArrayList&lt;String&gt;();
+    for (Item item : inventory) {
+        names.add(item.getPrimaryName());
+    }
+    return names;
+}
+
+void addToInventory(Item item) /* throws TooHeavyException */ {
+    inventory.add(item);
+}
+
+void removeFromInventory(Item item) {
+    inventory.remove(item);
+}
+
+Item getItemInVicinityNamed(String name) throws Item.NoItemException {
+
+    // First, check inventory.
+    for (Item item : inventory) {
+        if (item.goesBy(name)) {
+            return item;
+        }
+    }
+
+    // Next, check room contents.
+    for (Item item : adventurersCurrentRoom.getContents()) {
+        if (item.goesBy(name)) {
+            return item;
+        }
+    }
+
+    throw new Item.NoItemException();
+}
+
+Item getItemFromInventoryNamed(String name) throws Item.NoItemException {
+
+    for (Item item : inventory) {
+        if (item.goesBy(name)) {
+            return item;
+        }
+    }
+    throw new Item.NoItemException();
+}
+
+Room getAdventurersCurrentRoom() {
+    return adventurersCurrentRoom;
+}
+
+void setAdventurersCurrentRoom(Room room) {
+    adventurersCurrentRoom = room;
+}
+
+Dungeon getDungeon() {
+    return dungeon;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Displays current health of the user in a description instead of a point value.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+public class HealthCommand extends Command{</p>
+
+<p>HealthCommand(){
+}</p>
+
+<p><a href="https://github.com/Override" class="user-mention">@Override</a>
+/**</p>
+
+<ul>
+<li>Checks to see players current health in GameState, chooses a description appropriate for point value</li>
+<li>returns a String of that description</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - Description of players current health
+*/
+String execute() {
+return null;
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>import java.util.Scanner;</p>
+
+<p>/**</p>
+
+<ul>
+<li>Updated to be able to discern version of bork/save and pass off appropriately.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+public class Interpreter {</p>
+
+<p>private static GameState state; // not strictly necessary; GameState is 
+                                // singleton</p>
+
+<p>public static String USAGE_MSG = 
+    "Usage: Interpreter borkFile.bork|saveFile.sav.";</p>
+
+<p>/**</p>
+
+<ul>
+<li>Discerns file type, and acts based on version of bork/save file, disabling certain classes/methods</li>
+<li>based on the file version.</li>
+<li>
+<p><a href="https://github.com/param" class="user-mention">@param</a> args
+*/
+public static void main(String args[]) {</p>
+
+<p>if (args.length &lt; 1) {
+    System.err.println(USAGE_MSG);
+    System.exit(1);
+}</p>
+
+<p>String command;
+Scanner commandLine = new Scanner(System.in);</p>
+
+<p>try {
+    state = GameState.instance();
+    if (args[0].endsWith(".bork")) {
+        state.initialize(new Dungeon(args[0]));
+        System.out.println("\nWelcome to " + 
+            state.getDungeon().getName() + "!");
+    } else if (args[0].endsWith(".sav")) {
+        state.restore(args[0]);
+        System.out.println("\nWelcome back to " + 
+            state.getDungeon().getName() + "!");
+    } else {
+        System.err.println(USAGE_MSG);
+        System.exit(2);
+    }</p>
+
+<pre><code>System.out.print("\n" + 
+    state.getAdventurersCurrentRoom().describe() + "\n");
+
+command = promptUser(commandLine);
+
+while (!command.equals("q")) {
+
+    System.out.print(
+        CommandFactory.instance().parse(command).execute());
+
+    command = promptUser(commandLine);
+}
+
+System.out.println("Bye!");
+</code></pre>
+
+<p>} catch(Exception e) { 
+    e.printStackTrace(); 
+}
+}</p>
+</li>
+</ul>
+
+<p>private static String promptUser(Scanner commandLine) {</p>
+
+<pre><code>System.out.print("&gt; ");
+return commandLine.nextLine();
+</code></pre>
+
+<p>}</p>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>import java.util.ArrayList;</p>
+
+<p>class InventoryCommand extends Command {</p>
+
+<pre><code>InventoryCommand() {
+}
+
+public String execute() {
+    ArrayList&lt;String&gt; names = GameState.instance().getInventoryNames();
+    if (names.size() == 0) {
+        return "You are empty-handed.\n";
+    }
+    String retval = "You are carrying:\n";
+    for (String itemName : names) {
+        retval += "   A " + itemName + "\n";
+    }
+    return retval;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Updated to read Point values and event hashtables associated with each item, as well as getting</li>
+<li>those point values and saving them.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/
+import java.util.Scanner;
+import java.util.Hashtable;</li>
+</ul>
+
+<p>public class Item {</p>
+
+<pre><code>static class NoItemException extends Exception {}
+
+private String primaryName;
+private int weight;
+private Hashtable&lt;String,String&gt; messages;
+private int itemPoints;
+private Hashtable events;
+
+/**
+ * Updated to read new line for item point value, and a separate section for events associated
+ * with each item, and the actions that trigger them - Triggered by ItemSpecific Command.
+ * @param s
+ * @throws NoItemException
+ * @throws Dungeon.IllegalDungeonFormatException
+ */
+Item(Scanner s) throws NoItemException,
+    Dungeon.IllegalDungeonFormatException {
+
+    messages = new Hashtable&lt;String,String&gt;();
+
+    // Read item name.
+    primaryName = s.nextLine();
+    if (primaryName.equals(Dungeon.TOP_LEVEL_DELIM)) {
+        throw new NoItemException();
+    }
+
+    // Read item weight.
+    weight = Integer.valueOf(s.nextLine());
+
+    // Read and parse verbs lines, as long as there are more.
+    String verbLine = s.nextLine();
+    while (!verbLine.equals(Dungeon.SECOND_LEVEL_DELIM)) {
+        if (verbLine.equals(Dungeon.TOP_LEVEL_DELIM)) {
+            throw new Dungeon.IllegalDungeonFormatException("No '" +
+                Dungeon.SECOND_LEVEL_DELIM + "' after item.");
+        }
+        String[] verbParts = verbLine.split(":");
+        messages.put(verbParts[0],verbParts[1]);
+
+        verbLine = s.nextLine();
+    }
+}
+
+/**
+ * Returns the amount of points that an item gives for picking it up for the first time.
+ * @return itemPoints - point value of the item.
+ */
+public int getItemPoints(){
+    return itemPoints;
+}
+
+/**
+ * Checks a given command known as eventName against the hashtable of Events, checks for a result 
+ * and returns the appropriate message.
+ * @param eventName Name to check against hashtable
+ * @return String - Details of the event
+ */
+public String getEvent(String eventName){
+    return null;
+}
+
+boolean goesBy(String name) {
+    // could have other aliases
+    return this.primaryName.equals(name);
+}
+
+String getPrimaryName() { return primaryName; }
+
+public String getMessageForVerb(String verb) {
+    return messages.get(verb);
+}
+
+public String toString() {
+    return primaryName;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Updated to interact with new commands, such as Events and the point system.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+class ItemSpecificCommand extends Command {</p>
+
+<p>private String verb;
+private String noun;</p>
+
+<p>ItemSpecificCommand(String verb, String noun) {
+    this.verb = verb;
+    this.noun = noun;
+}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Updated to toss specific actions to trigger events, and interacts with personal hashtables of Item.</li>
+<li>
+<p><a href="https://github.com/return" class="user-mention">@return</a> String - Returns string based on action done
+*/
+public String execute() {</p>
+
+<p>Item itemReferredTo = null;
+try {
+    itemReferredTo = GameState.instance().getItemInVicinityNamed(noun);
+} catch (Item.NoItemException e) {
+    return "There's no " + noun + " here.";
+}</p>
+
+<p>String msg = itemReferredTo.getMessageForVerb(verb);
+return (msg == null ? 
+    "Sorry, you can't " + verb + " the " + noun + "." : msg) + "\n";
+}
+}</p>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>class MovementCommand extends Command {</p>
+
+<pre><code>private String dir;
+
+
+MovementCommand(String dir) {
+    this.dir = dir;
+}
+
+public String execute() {
+    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+    Room nextRoom = currentRoom.leaveBy(dir);
+    if (nextRoom != null) {  // could try/catch here.
+        GameState.instance().setAdventurersCurrentRoom(nextRoom);
+        return "\n" + nextRoom.describe() + "\n";
+    } else {
+        return "You can't go " + dir + ".\n";
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>import java.util.<em>;
+/</em>*</p>
+
+<ul>
+<li>New Supplementary feature. NPCs can trade items with the player, talk, have their own descriptions and inventory.</li>
+<li>NPCs are placed in certain rooms, and are read from new lines added to the save/bork files.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+public class NPC {</p>
+
+<p>private String name;
+private String description;
+private ArrayList Inventory;
+private Hashtable dialogue;
+private Room location;</p>
+
+<p>/**</p>
+
+<ul>
+<li>Reads off the npcs and places them in their locations.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> S Takes a scanner tossed from Room to read off the list of NPCs 
+<em>/
+NPC(Scanner S){
+}
+/</em>*</li>
+<li>Removes item from players inventory, and gives it to npc. Vice versa for npc.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> give Item to be given</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> take Item to be received</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> Item - Gives item to player
+*/
+Item trade(Item give, Item take){
+return null;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Removes item from players inventory and adds it to NPCs</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> gift Item to be given
+*/
+public void give(Item gift){
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Takes an item from an npcs inventory and adds it to the players.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> present item to be taken</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> Item - Item to add to players inventory
+*/
+Item take(Item present){
+return null;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Takes in a String prompt, checks it against hashtable of npc dialogue, returns a String</li>
+<li>based on result of hashtable for what to say.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> prompt String to be checked against</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - response to prompt
+*/
+String talk(String prompt){
+return null;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Describes an npc</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - description of npc
+*/
+public String describe(){
+return null;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Returns the name of an npc</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - name of npc
+*/
+String getName(){
+return null;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Sets the description of an npc</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> desc description of npc
+*/
+void setDesc(String desc){
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Adds npc line to save file, including inventory, location, status.
+*/
+public void storeState(){
+}
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>import java.io.<em>;
+import java.util.</em>;
+/**</p>
+
+<ul>
+<li>Updated to have point values for rooms, and to read additional lines in the bork/save files.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+public class Room {</p>
+
+<p>class NoRoomException extends Exception {}</p>
+
+<p>static String CONTENTS_STARTER = "Contents: ";</p>
+
+<p>private String title;
+private String desc;
+private boolean beenHere;
+private ArrayList contents;
+private ArrayList exits;
+private int roomPoints;
+private Hashtable npcs;</p>
+
+<p>Room(String title) {
+    init();
+    this.title = title;
+}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Returns the local variable roomPoints.</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> roomPoints - the value of discovering the room for the first time.
+*/
+public int getRooomPoints(){
+return roomPoints;
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Updated to read from new files. Now reads an additional line in the bork file the lists</li>
+<li>the NPCs in each room, and places those NPCs in a hashtable in the room.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> s</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> d</li>
+<li>
+<a href="https://github.com/throws" class="user-mention">@throws</a> NoRoomException</li>
+<li>
+<p><a href="https://github.com/throws" class="user-mention">@throws</a> Dungeon.IllegalDungeonFormatException
+*/
+Room(Scanner s, Dungeon d) throws NoRoomException,
+Dungeon.IllegalDungeonFormatException {</p>
+
+<p>this(s, d, true);
+}</p>
+</li>
+</ul>
+
+<p>/** Given a Scanner object positioned at the beginning of a "room" file
+    entry, read and return a Room object representing it. 
+    <a href="https://github.com/param" class="user-mention">@param</a> d The containing {<a href="https://github.com/link" class="user-mention">@link</a> edu.umw.stephen.bork.Dungeon} object, 
+    necessary to retrieve {<a href="https://github.com/link" class="user-mention">@link</a> edu.umw.stephen.bork.Item} objects.
+    <a href="https://github.com/param" class="user-mention">@param</a> initState should items listed for this room be added to it?
+    <a href="https://github.com/throws" class="user-mention">@throws</a> NoRoomException The reader object is not positioned at the
+    start of a room entry. A side effect of this is the reader's cursor
+    is now positioned one line past where it was.
+    <a href="https://github.com/throws" class="user-mention">@throws</a> IllegalDungeonFormatException A structural problem with the
+    dungeon file itself, detected when trying to read this room.
+ */
+Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException,
+    Dungeon.IllegalDungeonFormatException {</p>
+
+<pre><code>init();
+title = s.nextLine();
+desc = "";
+if (title.equals(Dungeon.TOP_LEVEL_DELIM)) {
+    throw new NoRoomException();
+}
+
+String lineOfDesc = s.nextLine();
+while (!lineOfDesc.equals(Dungeon.SECOND_LEVEL_DELIM) &amp;&amp;
+       !lineOfDesc.equals(Dungeon.TOP_LEVEL_DELIM)) {
+
+    if (lineOfDesc.startsWith(CONTENTS_STARTER)) {
+        String itemsList = lineOfDesc.substring(CONTENTS_STARTER.length());
+        String[] itemNames = itemsList.split(",");
+        for (String itemName : itemNames) {
+            try {
+                if (initState) {
+                    add(d.getItem(itemName));
+                }
+            } catch (Item.NoItemException e) {
+                throw new Dungeon.IllegalDungeonFormatException(
+                    "No such item '" + itemName + "'");
+            }
+        }
+    } else {
+        desc += lineOfDesc + "\n";
+    }
+    lineOfDesc = s.nextLine();
+}
+
+// throw away delimiter
+if (!lineOfDesc.equals(Dungeon.SECOND_LEVEL_DELIM)) {
+    throw new Dungeon.IllegalDungeonFormatException("No '" +
+        Dungeon.SECOND_LEVEL_DELIM + "' after room.");
+}
+</code></pre>
+
+<p>}</p>
+
+<p>// Common object initialization tasks.
+private void init() {
+    contents = new ArrayList();
+    exits = new ArrayList();
+    beenHere = false;
+}</p>
+
+<p>String getTitle() { return title; }</p>
+
+<p>void setDesc(String desc) { this.desc = desc; }</p>
+
+<p>/*</p>
+
+<ul>
+<li>Store the current (changeable) state of this room to the writer</li>
+<li>passed.
+*/
+void storeState(PrintWriter w) throws IOException {
+w.println(title + ":");
+w.println("beenHere=" + beenHere);
+if (contents.size() &gt; 0) {
+    w.print(CONTENTS_STARTER);
+    for (int i=0; i&lt;contents.size()-1; i++) {
+        w.print(contents.get(i).getPrimaryName() + ",");
+    }
+    w.println(contents.get(contents.size()-1).getPrimaryName());
+}
+w.println(Dungeon.SECOND_LEVEL_DELIM);
+}</li>
+</ul>
+
+<p>void restoreState(Scanner s, Dungeon d) throws 
+    GameState.IllegalSaveFormatException {</p>
+
+<pre><code>String line = s.nextLine();
+if (!line.startsWith("beenHere")) {
+    throw new GameState.IllegalSaveFormatException("No beenHere.");
+}
+beenHere = Boolean.valueOf(line.substring(line.indexOf("=")+1));
+
+line = s.nextLine();
+if (line.startsWith(CONTENTS_STARTER)) {
+    String itemsList = line.substring(CONTENTS_STARTER.length());
+    String[] itemNames = itemsList.split(",");
+    for (String itemName : itemNames) {
+        try {
+            add(d.getItem(itemName));
+        } catch (Item.NoItemException e) {
+            throw new GameState.IllegalSaveFormatException(
+                "No such item '" + itemName + "'");
+        }
+    }
+    s.nextLine();  // Consume "---".
+}
+</code></pre>
+
+<p>}</p>
+
+<p>public String describe() {
+    String description;
+    if (beenHere) {
+        description = title;
+    } else {
+        description = title + "\n" + desc;
+    }
+    for (Item item : contents) {
+        description += "\nThere is a " + item.getPrimaryName() + " here.";
+    }
+    if (contents.size() &gt; 0) { description += "\n"; }
+    if (!beenHere) {
+        for (Exit exit : exits) {
+            description += "\n" + exit.describe();
+        }
+    }
+    beenHere = true;
+    return description;
+}</p>
+
+<p>public Room leaveBy(String dir) {
+    for (Exit exit : exits) {
+        if (exit.getDir().equals(dir)) {
+            return exit.getDest();
+        }
+    }
+    return null;
+}</p>
+
+<p>void addExit(Exit exit) {
+    exits.add(exit);
+}</p>
+
+<p>void add(Item item) {
+    contents.add(item);
+}</p>
+
+<p>void remove(Item item) {
+    contents.remove(item);
+}</p>
+
+<p>Item getItemNamed(String name) throws Item.NoItemException {
+    for (Item item : contents) {
+        if (item.goesBy(name)) {
+            return item;
+        }
+    }
+    throw new Item.NoItemException();
+}</p>
+
+<p>ArrayList getContents() {
+    return contents;
+}
+}</p>
+</li>
+</ul>
+
+<p>class SaveCommand extends Command {</p>
+
+<pre><code>private static String DEFAULT_SAVE_FILENAME = "bork";
+
+private String saveFilename;
+
+SaveCommand(String saveFilename) {
+    if (saveFilename == null || saveFilename.length() == 0) {
+        this.saveFilename = DEFAULT_SAVE_FILENAME;
+    } else {
+        this.saveFilename = saveFilename;
+    }
+}
+
+public String execute() {
+    try {
+        GameState.instance().store(saveFilename);
+        return "Data saved to " + saveFilename +
+            GameState.SAVE_FILE_EXTENSION + ".\n";
+    } catch (Exception e) {
+        System.err.println("Couldn't save!");
+        e.printStackTrace();
+        return "";
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Tallys up given points for an action and adds them to the score in GameState. Points can come from items, actions, etc.</li>
+<li>ScoreCommand is called after other commands.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*
+*/
+public class ScoreCommand extends Command{</p>
+
+<p>public ScoreCommand(){
+}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Runs after another command, if the command gives points, and adds the respective points,</li>
+<li>then returns the number of points to be printed.</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - Returns string to be printed. Displays points obtained from an action.
+*/
+public String execute() {
+return null;
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>class TakeCommand extends Command {</p>
+
+<pre><code>private String itemName;
+
+TakeCommand(String itemName) {
+    this.itemName = itemName;
+}
+
+public String execute() {
+    if (itemName == null || itemName.trim().length() == 0) {
+        return "Take what?\n";
+    }
+    try {
+        Room currentRoom = 
+            GameState.instance().getAdventurersCurrentRoom();
+        Item theItem = currentRoom.getItemNamed(itemName);
+        GameState.instance().addToInventory(theItem);
+        currentRoom.remove(theItem);
+        return itemName + " taken.\n";
+    } catch (Item.NoItemException e) {
+        // Check and see if we have this already. If no exception is
+        // thrown from the line below, then we do.
+        try {
+            GameState.instance().getItemFromInventoryNamed(itemName);
+            return "You already have the " + itemName + ".\n";
+        } catch (Item.NoItemException e2) {
+            return "There's no " + itemName + " here.\n";
+        }
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Allows a player to talk to an NPC, giving different dialogue based on Player input.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/
+public class TalkCommand extends Command{</p>
+
+<p>private String prompt;</p>
+
+<p>/**</p>
+
+<ul>
+<li>Stores variables for execute</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> p String inputed by player
+*/
+public TalkCommand(String p){
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Returns String by checking player inputed String against a hashtable of NPC dialogue options</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - Returns string based on dialogue hashtable
+*/
+public String execute() {
+return null;
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Trades an item from a player to an NPC, or vice versa, adding the item to their respective inventories.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> David, Ryan, Scott</li>
+<li>
+<p><a href="https://github.com/version" class="user-mention">@version</a> Group Project 2
+*/
+public class TradeCommand extends Command {</p>
+
+<p>private Item give;
+private Item take;</p>
+
+<p>/**</p>
+
+<ul>
+<li>Sets up variables for execute method.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> give Item to be given</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> take Item to be taken</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> npc NPC to interact with
+*/
+public TradeCommand(String give, String take, String npc){
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Trades item from user to NPC or vice versa, then returns String to be printed.</li>
+<li>
+<a href="https://github.com/Override" class="user-mention">@Override</a> execute() </li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String - Prints string to display action to User
+*/
+public String execute() {
+return null;
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>}</p>
+
+<p>class UnknownCommand extends Command {</p>
+
+<pre><code>private String bogusCommand;
+
+UnknownCommand(String bogusCommand) {
+    this.bogusCommand = bogusCommand;
+}
+
+String execute() {
+    return "I'm not sure what you mean by \"" + bogusCommand + "\".\n";
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<ul>
+<li>Unlocks a locked exit state. Transforms exit boolean from false to true, allowing the user</li>
+<li>to access the exit.</li>
+<li>
+<a href="https://github.com/author" class="user-mention">@author</a> Scott, David, Ryan</li>
+<li>
+<a href="https://github.com/version" class="user-mention">@version</a> Group Project 2</li>
+<li>
+<p>*/
+public class UnlockCommand extends Command {</p>
+
+<p>private String key;</p>
+
+<p>/**</p>
+
+<ul>
+<li>Takes the key to be checked against an Hashtable of keys that an Exit has.</li>
+<li>
+<a href="https://github.com/param" class="user-mention">@param</a> key String value to check against hashtable
+*/
+public UnlockCommand(String key){
+}</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>Executes command and then returns String to be printed stating which door's unlocked.</li>
+<li>
+<a href="https://github.com/Override" class="user-mention">@Override</a> Command</li>
+<li>
+<a href="https://github.com/return" class="user-mention">@return</a> String  to be printed to User
+*/
+public String execute() {
+return null;
+}</li>
+</ul>
+</li>
+</ul>
+
+<p>}</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/democallister/Zork-Team-6">Zork-team-6</a> is maintained by <a href="https://github.com/democallister">democallister</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
