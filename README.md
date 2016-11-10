@@ -1,19 +1,32 @@
 # Zork-Team-6
 The big project for CPSC 240
 
-import java.util.*;
-import java.io.*;
+
+/**
+ * Abstract class for multiple command types
+ * @author Scott, Ryan, David
+ * @version Group project 2
+ */
 abstract class Command {
 
     abstract String execute();
 
 }
+
+/**
+ * Takes commands from user input and determines what kind of command it is, then calls an execution method for that particular command.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ */
 public class CommandFactory {
 
     private static CommandFactory theInstance;
     public static List<String> MOVEMENT_COMMANDS = 
         Arrays.asList("n","w","e","s","u","d" );
-
+    /**
+     * Instance method for the singleton class
+     * @return CommandFactory - the instance of one command
+     */
     public static synchronized CommandFactory instance() {
         if (theInstance == null) {
             theInstance = new CommandFactory();
@@ -24,6 +37,17 @@ public class CommandFactory {
     private CommandFactory() {
     }
 
+    /**
+     * Takes an input from the user and determines what kind of command it is, then returns that command
+     * @param String the command input
+     * @return SaveCommand - command to save the game
+     * @return TakeCommand - command to pick up an item
+     * @return DropCommand - command to remove an item from the player’s inventory
+     * @return InventoryCommand - displays the player’s inventory
+     * @return MovementCommand - command to move to a different room
+     * @return ItemSpecificCommand - command to perform an action on an item
+     * @return UnknownCommand - unrecognized command
+     */
     public Command parse(String command) {
         String parts[] = command.split(" ");
         String verb = parts[0];
@@ -49,6 +73,38 @@ public class CommandFactory {
         return new UnknownCommand(command);
     }
 }
+
+/**
+ * Command for transforming multiple items into a different item
+ * @author David, Scott, Ryan
+ * @version Group Project 2
+ */
+public class CraftCommand extends Command {
+
+	public CraftCommand(){
+	}
+	
+        /**
+         * Checks to see if the player has both the specified items
+         * removes them from the player’s inventory and adds the crafted item if they are both present
+         * notifies the player that they do not have the necessary items if they are not
+         * @return String - affirmation that the items have been crafted
+         * @return String - Notice that the player does not have the necessary items
+         */
+
+	@Override
+	String execute() {
+		return null;
+	}
+
+}
+
+/** 
+ * command to remove an item from the player’s inventory
+ * @author David, Scott, Ryan
+ * @version Group Project 2
+ */
+
 class DropCommand extends Command {
 
     private String itemName;
@@ -56,7 +112,12 @@ class DropCommand extends Command {
     DropCommand(String itemName) {
         this.itemName = itemName;
     }
-
+    /**
+     * Checks to see if the specified item is in the players inventory
+     * removes it if it is, prints a message stating they do not have the item if it is not
+     * @return String - affirmation that the item was dropped
+     * @return String - Notice that the player does not have the item
+     */
     public String execute() {
         if (itemName == null || itemName.trim().length() == 0) {
             return "Drop what?\n";
@@ -72,6 +133,14 @@ class DropCommand extends Command {
         }
     }
 }
+
+import java.util.Hashtable;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
+
 public class Dungeon {
 
     public static class IllegalDungeonFormatException extends Exception {
@@ -248,6 +317,40 @@ public class Dungeon {
         return items.get(primaryItemName);
     }
 }
+
+public class Event {
+
+	private String eventName;
+	
+	public Event(String eventName){
+	}
+	
+	String execute(){
+		return null;
+	}
+	
+	String determineType(){
+		return null;
+	}
+	
+	private void deathEvent(){}
+	
+	private void scoreEvent(){}
+	
+	private void woundEvent(){}
+	
+	private void teleportEvent(){}
+	
+	private void disappearEvent(){}
+	
+	private void transformEvent(){}
+	
+	private void winEvent(){}
+	
+	}
+
+import java.util.Scanner;
+
 public class Exit {
 
     class NoExitException extends Exception {}
@@ -308,6 +411,15 @@ public class Exit {
     Room getSrc() { return src; }
     Room getDest() { return dest; }
 }
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 public class GameState {
 
     public static class IllegalSaveFormatException extends Exception {
@@ -464,6 +576,38 @@ public class GameState {
     }
 
 }
+
+/**
+ * Displays current health of the user in a description instead of a point value.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
+public class HealthCommand extends Command{
+
+	HealthCommand(){
+	}
+	
+	@Override
+	/**
+	 * Checks to see players current health in GameState, chooses a description appropriate for point value
+	 * returns a String of that description
+	 * @return String - Description of players current health
+	 */
+	String execute() {
+		return null;
+	}
+
+}
+
+import java.util.Scanner;
+
+/**
+ * Updated to be able to discern version of bork/save and pass off appropriately.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
 public class Interpreter {
 
     private static GameState state; // not strictly necessary; GameState is 
@@ -472,6 +616,11 @@ public class Interpreter {
     public static String USAGE_MSG = 
         "Usage: Interpreter borkFile.bork|saveFile.sav.";
 
+    /**
+     * Discerns file type, and acts based on version of bork/save file, disabling certain classes/methods
+     * based on the file version.
+     * @param args
+     */
     public static void main(String args[]) {
 
         if (args.length < 1) {
@@ -524,6 +673,9 @@ public class Interpreter {
     }
 
 }
+
+import java.util.ArrayList;
+
 class InventoryCommand extends Command {
 
     InventoryCommand() {
@@ -541,6 +693,16 @@ class InventoryCommand extends Command {
         return retval;
     }
 }
+
+/**
+ * Updated to read Point values and event hashtables associated with each item, as well as getting
+ * those point values and saving them.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ */
+import java.util.Scanner;
+import java.util.Hashtable;
+
 public class Item {
 
     static class NoItemException extends Exception {}
@@ -548,8 +710,16 @@ public class Item {
     private String primaryName;
     private int weight;
     private Hashtable<String,String> messages;
-
-
+    private int itemPoints;
+    private Hashtable events;
+    
+    /**
+     * Updated to read new line for item point value, and a separate section for events associated
+     * with each item, and the actions that trigger them - Triggered by ItemSpecific Command.
+     * @param s
+     * @throws NoItemException
+     * @throws Dungeon.IllegalDungeonFormatException
+     */
     Item(Scanner s) throws NoItemException,
         Dungeon.IllegalDungeonFormatException {
 
@@ -578,6 +748,24 @@ public class Item {
         }
     }
 
+    /**
+     * Returns the amount of points that an item gives for picking it up for the first time.
+     * @return itemPoints - point value of the item.
+     */
+    public int getItemPoints(){
+    	return itemPoints;
+    }
+    
+    /**
+     * Checks a given command known as eventName against the hashtable of Events, checks for a result 
+     * and returns the appropriate message.
+     * @param eventName Name to check against hashtable
+     * @return String - Details of the event
+     */
+    public String getEvent(String eventName){
+    	return null;
+    }
+    
     boolean goesBy(String name) {
         // could have other aliases
         return this.primaryName.equals(name);
@@ -593,6 +781,13 @@ public class Item {
         return primaryName;
     }
 }
+
+/**
+ * Updated to interact with new commands, such as Events and the point system.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
 class ItemSpecificCommand extends Command {
 
     private String verb;
@@ -604,6 +799,10 @@ class ItemSpecificCommand extends Command {
         this.noun = noun;
     }
 
+    /**
+     * Updated to toss specific actions to trigger events, and interacts with personal hashtables of Item.
+     * @return String - Returns string based on action done
+     */
     public String execute() {
         
         Item itemReferredTo = null;
@@ -618,6 +817,8 @@ class ItemSpecificCommand extends Command {
             "Sorry, you can't " + verb + " the " + noun + "." : msg) + "\n";
     }
 }
+
+
 class MovementCommand extends Command {
 
     private String dir;
@@ -638,6 +839,103 @@ class MovementCommand extends Command {
         }
     }
 }
+
+import java.util.*;
+/**
+ * New Supplementary feature. NPCs can trade items with the player, talk, have their own descriptions and inventory.
+ * NPCs are placed in certain rooms, and are read from new lines added to the save/bork files.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
+public class NPC {
+
+	private String name;
+	private String description;
+	private ArrayList<Item> Inventory;
+	private Hashtable dialogue;
+	private Room location;
+	
+	/**
+	 * Reads off the npcs and places them in their locations.
+	 * @param S Takes a scanner tossed from Room to read off the list of NPCs 
+	 */
+	NPC(Scanner S){
+	}
+	/**
+	 * Removes item from players inventory, and gives it to npc. Vice versa for npc.
+	 * @param give Item to be given
+	 * @param take Item to be received
+	 * @return Item - Gives item to player
+	 */
+	Item trade(Item give, Item take){
+		return null;
+	}
+	
+	/**
+	 * Removes item from players inventory and adds it to NPCs
+	 * @param gift Item to be given
+	 */
+	public void give(Item gift){
+	}
+	
+	/**
+	 * Takes an item from an npcs inventory and adds it to the players.
+	 * @param present item to be taken
+	 * @return Item - Item to add to players inventory
+	 */
+	Item take(Item present){
+		return null;
+	}
+	
+	/**
+	 * Takes in a String prompt, checks it against hashtable of npc dialogue, returns a String
+	 * based on result of hashtable for what to say.
+	 * @param prompt String to be checked against
+	 * @return String - response to prompt
+	 */
+	String talk(String prompt){
+		return null;
+	}
+	
+	/**
+	 * Describes an npc
+	 * @return String - description of npc
+	 */
+	public String describe(){
+		return null;
+	}
+	
+	/**
+	 * Returns the name of an npc
+	 * @return String - name of npc
+	 */
+	String getName(){
+		return null;
+	}
+	
+	/**
+	 * Sets the description of an npc
+	 * @param desc description of npc
+	 */
+	void setDesc(String desc){
+	}
+	
+	/**
+	 * Adds npc line to save file, including inventory, location, status.
+	 */
+	public void storeState(){
+	}
+}
+
+import java.io.*;
+import java.util.*;
+/**
+ * Updated to have point values for rooms, and to read additional lines in the bork/save files.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
 public class Room {
 
     class NoRoomException extends Exception {}
@@ -649,12 +947,30 @@ public class Room {
     private boolean beenHere;
     private ArrayList<Item> contents;
     private ArrayList<Exit> exits;
-
+    private int roomPoints;
+    private Hashtable npcs;
+    
     Room(String title) {
         init();
         this.title = title;
     }
 
+    /**
+     * Returns the local variable roomPoints.
+     * @return roomPoints - the value of discovering the room for the first time.
+     */
+    public int getRooomPoints(){
+    	return roomPoints;
+    }
+    
+    /**
+     * Updated to read from new files. Now reads an additional line in the bork file the lists
+     * the NPCs in each room, and places those NPCs in a hashtable in the room.
+     * @param s
+     * @param d
+     * @throws NoRoomException
+     * @throws Dungeon.IllegalDungeonFormatException
+     */
     Room(Scanner s, Dungeon d) throws NoRoomException,
         Dungeon.IllegalDungeonFormatException {
 
@@ -819,6 +1135,7 @@ public class Room {
         return contents;
     }
 }
+
 class SaveCommand extends Command {
 
     private static String DEFAULT_SAVE_FILENAME = "bork";
@@ -845,6 +1162,30 @@ class SaveCommand extends Command {
         }
     }
 }
+
+/**
+ * Tallys up given points for an action and adds them to the score in GameState. Points can come from items, actions, etc.
+ * ScoreCommand is called after other commands.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ *
+ */
+public class ScoreCommand extends Command{
+	
+	public ScoreCommand(){
+	}
+	
+	/**
+	 * Runs after another command, if the command gives points, and adds the respective points,
+	 * then returns the number of points to be printed.
+	 * @return String - Returns string to be printed. Displays points obtained from an action.
+	 */
+	public String execute() {
+		return null;
+	}
+
+}
+
 class TakeCommand extends Command {
 
     private String itemName;
@@ -876,6 +1217,63 @@ class TakeCommand extends Command {
         }
     }
 }
+
+/**
+ * Allows a player to talk to an NPC, giving different dialogue based on Player input.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ */
+public class TalkCommand extends Command{
+
+	private String prompt;
+	
+	/**
+	 * Stores variables for execute
+	 * @param p String inputed by player
+	 */
+	public TalkCommand(String p){
+	}
+	
+	/**
+	 * Returns String by checking player inputed String against a hashtable of NPC dialogue options
+	 * @return String - Returns string based on dialogue hashtable
+	 */
+	public String execute() {
+		return null;
+	}
+
+}
+
+/**
+ * Trades an item from a player to an NPC, or vice versa, adding the item to their respective inventories.
+ * @author David, Ryan, Scott
+ * @version Group Project 2
+ */
+public class TradeCommand extends Command {
+
+	private Item give;
+	private Item take;
+	
+	/**
+	 * Sets up variables for execute method.
+	 * @param give Item to be given
+	 * @param take Item to be taken
+	 * @param npc NPC to interact with
+	 */
+	public TradeCommand(String give, String take, String npc){
+	}
+	
+	/**
+	 * Trades item from user to NPC or vice versa, then returns String to be printed.
+	 * @Override execute() 
+	 * @return String - Prints string to display action to User
+	 */
+	public String execute() {
+		return null;
+	}
+
+}
+
 class UnknownCommand extends Command {
 
     private String bogusCommand;
@@ -887,4 +1285,33 @@ class UnknownCommand extends Command {
     String execute() {
         return "I'm not sure what you mean by \"" + bogusCommand + "\".\n";
     }
+}
+
+/**
+ * Unlocks a locked exit state. Transforms exit boolean from false to true, allowing the user
+ * to access the exit.
+ * @author Scott, David, Ryan
+ * @version Group Project 2
+ * 
+ */
+public class UnlockCommand extends Command {
+
+	private String key;
+	
+	/**
+	 * Takes the key to be checked against an Hashtable of keys that an Exit has.
+	 * @param key String value to check against hashtable
+	 */
+	public UnlockCommand(String key){
+	}
+	
+	/**
+	 * Executes command and then returns String to be printed stating which door's unlocked.
+	 * @Override Command
+	 * @return String  to be printed to User
+	 */
+	public String execute() {
+		return null;
+	}
+
 }
