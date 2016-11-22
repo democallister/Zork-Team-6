@@ -52,7 +52,8 @@ public class GameState {
         if (!s.nextLine().equals(SAVE_FILE_VERSION)) {
             throw new IllegalSaveFormatException("Save file not compatible.");
         }
-
+        playerScore = Integer.parseInt(s.nextLine());
+        playerHealth = Integer.parseInt(s.nextLine());
         String dungeonFileLine = s.nextLine();
 
         if (!dungeonFileLine.startsWith(Dungeon.FILENAME_LEADER)) {
@@ -91,6 +92,8 @@ public class GameState {
     void store(String saveName) throws IOException {
         String filename = saveName + SAVE_FILE_EXTENSION;
         PrintWriter w = new PrintWriter(new FileWriter(filename));
+        w.println(playerScore);
+        w.println(playerHealth);
         w.println(SAVE_FILE_VERSION);
         dungeon.storeState(w);
         w.println(ADVENTURER_MARKER);
@@ -173,6 +176,12 @@ public class GameState {
     
     public int getPlayerHealth(){
         return playerHealth;
+    }
+    public void setPlayerScore(int s){
+        playerScore = s;
+    }
+    public void setPlayerHealth(int h){
+        playerHealth = h;
     }
 
 }

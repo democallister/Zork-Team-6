@@ -15,8 +15,19 @@ public class ScoreCommand extends Command{
     public ScoreCommand(String s){
         this.ScoreCommand = s;
     }
-    
+    @Override
     String execute(){
-        return "Your current score is: " + GameState.instance().getPlayerScore() + "\n";
+          if (GameState.instance().getPlayerScore() <= 24){
+            return "Your current score is: " + GameState.instance().getPlayerScore() + "\nYour current rank is Bronze.";
+        }
+          if (GameState.instance().getPlayerScore() > 24 && GameState.instance().getPlayerScore() <= 49){
+            return "Your current score is: " + GameState.instance().getPlayerScore() + "\nYour current rank is Silver.";
+        }
+         if (GameState.instance().getPlayerScore() > 49 && GameState.instance().getPlayerScore() <= 74){
+            return "Your current score is: " + GameState.instance().getPlayerScore() + "\nYour current rank is Gold.";
+        } 
+         else{
+            return "Your current score is: " + GameState.instance().getPlayerScore() + "\nYour current rank is Platinum.";
+        }
     }
 }
