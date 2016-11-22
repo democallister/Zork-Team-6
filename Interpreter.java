@@ -12,6 +12,8 @@ public class Interpreter {
 
     private static GameState state; // not strictly necessary; GameState is 
                                     // singleton
+    
+    public static boolean endState = false;
 
     public static String USAGE_MSG = 
         "Usage: Interpreter borkFile.bork|saveFile.sav.";
@@ -45,7 +47,7 @@ public class Interpreter {
 
             command = promptUser(commandLine);
 
-            while (!command.equals("q")) {
+            while (!command.equals("q") && !endState) {
 
                 System.out.print(
                     CommandFactory.instance().parse(command).execute());

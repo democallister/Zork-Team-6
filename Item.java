@@ -38,9 +38,10 @@ public class Item {
             if (verbParts[0].contains("[")){
                 String verbBit = verbParts[0];
                 String[] eventParts = verbBit.split("\\[");
-                eventParts[1] = eventParts[1].replace("]", "");
                 String eventBit = eventParts[1];
-                    events.put(eventParts[0], eventBit);
+                String getBracket = "[";
+                getBracket = getBracket.concat(eventBit);
+                    events.put(eventParts[0], getBracket);
             }
             
             messages.put(verbParts[0],verbParts[1]);
@@ -63,7 +64,12 @@ public class Item {
     public String toString() {
         return primaryName;
     }
+    
     public String getEvent(String e){
         return events.get(e);
+    }
+    
+    public boolean isEvent(String e){
+        return events.contains(e);
     }
 }
