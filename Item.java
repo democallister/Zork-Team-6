@@ -34,17 +34,16 @@ public class Item {
                 throw new Dungeon.IllegalDungeonFormatException("No '" +
                     Dungeon.SECOND_LEVEL_DELIM + "' after item.");
             }
+            if(verbLine.contains("[")){
+            	String[] eventParts = verbLine.split("\\[");
+            	System.out.println(eventParts[0]);
+            	events.put(eventParts[0], eventParts[1]);
+
+            }else{
             String[] verbParts = verbLine.split(":");
-            if (verbParts[0].contains("[")){
-                String verbBit = verbParts[0];
-                String[] eventParts = verbBit.split("\\[");
-                eventParts[1] = eventParts[1].replace("]", "");
-                String eventBit = eventParts[1];
-                    events.put(eventParts[0], eventBit);
-            }
-            
+            System.out.println(verbParts[0]);
             messages.put(verbParts[0],verbParts[1]);
-            
+            }
             verbLine = s.nextLine();
         }
     }
@@ -63,7 +62,12 @@ public class Item {
     public String toString() {
         return primaryName;
     }
+    
     public String getEvent(String e){
         return events.get(e);
+    }
+    
+    public boolean isEvent(String e){
+        return events.containsKey(e);
     }
 }
