@@ -18,7 +18,18 @@ public class HealthCommand extends Command{
     }
     
     public String execute(){
-        return "You are currently at " + GameState.instance().getPlayerHealth() + "% health\n";
+        if (GameState.instance().getPlayerHealth() >= 75){
+            return "All is well.";
+        }
+        if (GameState.instance().getPlayerHealth() < 75 && GameState.instance().getPlayerHealth() >= 50){
+            return "Fatigue is starting to rear its ugly head...";
+        }
+        if (GameState.instance().getPlayerHealth() < 50 && GameState.instance().getPlayerHealth() >= 25){
+            return "Your body is starting to give out on you...";
+        }
+        else{
+            return "Bruh, just leave and rest up";
+        }
     }
     
 }
