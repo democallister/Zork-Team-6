@@ -6,16 +6,18 @@ package zork;
  */
 public class TradeCommand extends Command {
 
-	private Item give;
-	private Item take;
-	
+
+	private String item;
+	private String npc;
 	/**
 	 * Sets up variables for execute method.
 	 * @param give Item to be given
 	 * @param take Item to be taken
 	 * @param npc NPC to interact with
 	 */
-	public TradeCommand(String give, String take, String npc){
+	public TradeCommand(String verb, String npc, String item){
+		this.item = item;
+		this.npc = npc;
 	}
 	
 	/**
@@ -24,7 +26,32 @@ public class TradeCommand extends Command {
 	 * @return String - Prints string to display action to User
 	 */
 	public String execute() {
-		return null;
-	}
+		 if (item == "temp" || item.trim().length() == 0) {
+	            return "Trade what?\n";
+	        }
+	            try {
+	            	Room currentRoom = 
+	    	                GameState.instance().getAdventurersCurrentRoom();
+	            	Item toTrade = GameState.instance().getItemFromInventoryNamed(item);
+	            	try{
+	            		NPC Temp = currentRoom.getNPCNamed(npc);
+	            		if(Temp.hasItem()){
+	            			Temp.give(toTrade);
+	            			GameState.instance().addToInventory(Temp.getItem());
+	            			GameState.instance().removeFromInventory(toTrade);
+	            			return(Temp.talk("Trade") + "\n");
+	            		}else
+	            			return("NPC has no items to trade! \n");
+	            		
+	            	}catch(NPC.NoNPCException e){
+	            		return("No NPC by that Name! \n");
+	            	}
+	            	
+	                
+	            } catch (Item.NoItemException e2) {
+	                return "You do not have " + item + "\n";
+	            }
+	        }
+	
 
 }

@@ -9,12 +9,16 @@ public class Exit {
 
     private String dir;
     private Room src, dest;
+    private boolean isLocked;
+    private String keyItem;
 
-    Exit(String dir, Room src, Room dest) {
+    Exit(String dir, Room src, Room dest, boolean isLocked, String keyItem) {
         init();
         this.dir = dir;
         this.src = src;
         this.dest = dest;
+        this.isLocked = isLocked;
+        this.keyItem = keyItem;
         src.addExit(this);
     }
 
@@ -39,11 +43,13 @@ public class Exit {
         src = d.getRoom(srcTitle);
         dir = s.nextLine();
         dest = d.getRoom(s.nextLine());
+        isLocked = Boolean.parseBoolean(s.nextLine());
+        keyItem = s.nextLine();
         
         // I'm an Exit object. Great. Add me as an exit to my source Room too,
         // though.
         src.addExit(this);
-
+       
         // throw away delimiter
         if (!s.nextLine().equals(Dungeon.SECOND_LEVEL_DELIM)) {
             throw new Dungeon.IllegalDungeonFormatException("No '" +
@@ -58,8 +64,27 @@ public class Exit {
     String describe() {
         return "You can go " + dir + " to " + dest.getTitle() + ".";
     }
-
+    void addKey(String key){
+        keyItem = key;
+    }
+    
+    void unlock(){
+        for (Item i : GameState.instance().inventory){
+            if (i.goesBy(keyItem)){
+                isLocked = false;
+            }
+        }
+        if (isLocked == false){
+            System.out.println("door unlocked");
+        }
+        if (isLocked == true){
+            System.out.println("You do not have the right key for this door.");
+        }
+    }
+    
+    String getKey() { return keyItem; }
     String getDir() { return dir; }
     Room getSrc() { return src; }
     Room getDest() { return dest; }
+    boolean getLockState() { return isLocked; }
 }

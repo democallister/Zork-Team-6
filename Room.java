@@ -8,6 +8,9 @@ package zork;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import zork.NPC.NoNPCException;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,6 +25,7 @@ public class Room {
     private boolean beenHere;
     private ArrayList<Item> contents;
     private ArrayList<Exit> exits;
+    private ArrayList<NPC> NPCs;
 
     Room(String title) {
         init();
@@ -87,6 +91,7 @@ public class Room {
 
     // Common object initialization tasks.
     private void init() {
+    	NPCs = new ArrayList<NPC>();
         contents = new ArrayList<Item>();
         exits = new ArrayList<Exit>();
         beenHere = false;
@@ -148,6 +153,11 @@ public class Room {
         for (Item item : contents) {
             description += "\nThere is a " + item.getPrimaryName() + " here.";
         }
+        for(NPC npc : NPCs){
+        	description += "\n" + npc.getName() + " is here.";
+        	if(!beenHere)
+        		description += "\n" + npc.getName() + " - " + npc.describe();
+        }
         if (contents.size() > 0) { description += "\n"; }
         if (!beenHere) {
             for (Exit exit : exits) {
@@ -157,11 +167,25 @@ public class Room {
         beenHere = true;
         return description;
     }
+    public Exit getExit(String dir){
+        for (Exit exit : exits){
+            if (exit.getDir().equals(dir)){
+            return exit;
+        }       
+    }
+         return null;
+    }
     
     public Room leaveBy(String dir) {
         for (Exit exit : exits) {
             if (exit.getDir().equals(dir)) {
-                return exit.getDest();
+                if (exit.getLockState() == true){
+                    System.out.println("The door is locked.");
+                    break;
+                }
+                if (exit.getLockState() == false){
+                  return exit.getDest();
+                }  
             }
         }
         return null;
@@ -190,5 +214,26 @@ public class Room {
 
     ArrayList<Item> getContents() {
         return contents;
+    }
+    
+    void add(NPC npc){
+    	NPCs.add(npc);
+    }
+    
+    void remove(NPC npc){
+    	NPCs.remove(npc);
+    }
+    
+    NPC getNPCNamed(String name) throws NoNPCException{
+    	for (NPC npc : NPCs) {
+            if (npc.goesBy(name)) {
+                return npc;
+            }
+        }
+    	throw new NPC.NoNPCException();
+    }
+    
+    ArrayList<NPC> getNPCs(){
+    	return NPCs;
     }
 }

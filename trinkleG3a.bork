@@ -14,6 +14,22 @@ recycle[Score(5),Disappear]:Boo-ya, helped save the environment.---magicWand
 35---WawaTravelMug
 10refill[Win]:You refill the mug with everlasting light roast coffee, and live happily ever after! :)---donut
 7eat[Disappear,Wound(-2)]:You feel mildly guilt-ridden.stomp:The donut is now smooshed.---
+basementKey
+1
+examine:There is a note attached to the key claiming it will open the door to the basement.
+---
+rope
+10
+swing:The rope spins around and hits you in the face. Don’t be so clumsy next time.
+---
+rock
+25
+examine:this rock looks heavy. maybe if you had a rope to sling it with…
+---
+sling
+35
+swing:The rock is swinging around really fast now. looks pretty dangerous.
+---
 ===
 Rooms:
 Rotunda
@@ -21,7 +37,7 @@ You are in a beautiful round entry chamber, with tall white pillars that
 seemingly reach to the skies. There is an elevator here.
 ---
 Basement hallway
-Contents: DrPepper
+Contents: DrPepper,rope
 A long, white hallway stretches to the east and west. It is cold here, and you
 can detect the faint buzz of computer fans. A vending machine hums softly in the
 corner.
@@ -31,6 +47,7 @@ Contents: StarWarsToy,WawaTravelMug,donut
 This is a cluttered office, with many geeky toys sprawling on a desk.
 ---
 Room B6
+Contents: rock
 Sunlight streams through tall windows and illuminates a brilliant classroom.
 ---
 Room B13
@@ -40,7 +57,7 @@ merrily away at several of them. They look up and wave hello to you.
 The door locks behind you.
 ---
 Rotunda balcony
-Contents: chainsaw,magicWand
+Contents: chainsaw,magicWand,basementKey
 You stand on a circular white balcony overlooking an entry hall.
 Columnar bannisters in ancient Grecian style stand between you and the
 precipice.
@@ -50,37 +67,82 @@ Exits:
 Rotunda
 u
 Rotunda balcony
+false
+null
 ---
 Rotunda balcony
 d
 Rotunda
+false
+null
 ---
 Rotunda
 d
 Basement hallway
+true
+basementKey
 ---
 Basement hallway
 u
 Rotunda
+false
+null
 ---
 Basement hallway
 s
 Room B13
+false
+null
 ---
 Room B6
 w
 Basement hallway
+false
+null
 ---
 Basement hallway
 e
 Room B6
+false
+null
 ---
 Basement hallway
 w
 Stephen's office
+false
+null
 ---
 Stephen's office
 e
 Basement hallway
+false
+null
+---
+===
+NPCs:
+Bob
+Basement hallway
+A shady man that does shady things. You probably shouldn't talk to him.
+Bomb
+Dialogue:Bob looks like he has stuff to say. - Hello - Trade - Moon -
+Hello:Sup man, name's Bob.
+Trade:Here's something real special...
+Moon:I'm going to go up there one day. And then I'm going to dig a hole. A big hole. It's going to be great.
+---
+Steve
+Stephen's office
+You're pretty sure this is Stephen's office, not Steve's...
+Bomb
+Dialogue:Steve looks pretty shaky. I wouldn't talk to him. - Hello -
+Hello:Go away
+---
+Carl
+Rotunda
+Wow, a Carl NPC. Really? He probably does a lot of REALLY cool stuff. You should REALLY talk to him.
+donut
+Dialogue:I didn't think you would. Whatever. - Hello - Moon - Bye -
+Hello:Hi, I'm Carl.
+Trade:Here's a completely WHOLE donut. COMPLETELY WHOLE.
+Moon:I bet if you dug a hole up there you'd be pretty rad, man.
 ---
 ===

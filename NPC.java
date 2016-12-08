@@ -1,5 +1,7 @@
 package zork;
 import java.util.*;
+
+import zork.Item.NoItemException;
 /**
  * New Supplementary feature. NPCs can trade items with the player, talk, have their own descriptions and inventory.
  * NPCs are placed in certain rooms, and are read from new lines added to the save/bork files.
@@ -12,39 +14,53 @@ public class NPC {
 	private String name;
 	private String description;
 	private ArrayList<Item> Inventory;
-	private Hashtable dialogue;
-	private Room location;
+	private Hashtable<String, String> dialogue;
+	private String RoomName;
+	
+	static class NoNPCException extends Exception{}
 	
 	/**
 	 * Reads off the npcs and places them in their locations.
 	 * @param S Takes a scanner tossed from Room to read off the list of NPCs 
 	 */
-	NPC(Scanner S){
+	NPC(Scanner S, Dungeon d) throws Dungeon.IllegalDungeonFormatException, NoNPCException{
+		Inventory = new ArrayList<Item>();
+		dialogue = new Hashtable<String, String>();
+		
+		name = S.nextLine();
+		if(name.equals("==="))
+			throw new NoNPCException();
+		
+		RoomName = S.nextLine();
+		description = S.nextLine();
+		String lineOfDesc = S.nextLine();
+		
+		while (!lineOfDesc.equals(Dungeon.SECOND_LEVEL_DELIM) &&
+	               !lineOfDesc.equals(Dungeon.TOP_LEVEL_DELIM)) {
+			
+				if(lineOfDesc.contains(":")){
+					String[] dialogueParts = lineOfDesc.split(":");
+					dialogue.put(dialogueParts[0], dialogueParts[1]);
+				}else{
+					try {
+						Inventory.add(d.getItem(lineOfDesc));
+					} catch (NoItemException e) {
+					}
+				}
+				lineOfDesc = S.nextLine();
+	        }
+		
+		d.getRoom(RoomName).add(this);
 	}
-	/**
-	 * Removes item from players inventory, and gives it to npc. Vice versa for npc.
-	 * @param give Item to be given
-	 * @param take Item to be received
-	 * @return Item - Gives item to player
-	 */
-	Item trade(Item give, Item take){
-		return null;
-	}
+
 	
 	/**
 	 * Removes item from players inventory and adds it to NPCs
 	 * @param gift Item to be given
 	 */
 	public void give(Item gift){
-	}
-	
-	/**
-	 * Takes an item from an npcs inventory and adds it to the players.
-	 * @param present item to be taken
-	 * @return Item - Item to add to players inventory
-	 */
-	Item take(Item present){
-		return null;
+		System.out.println("Thanks friend");
+		Inventory.add(gift);
 	}
 	
 	/**
@@ -54,7 +70,7 @@ public class NPC {
 	 * @return String - response to prompt
 	 */
 	String talk(String prompt){
-		return null;
+		return dialogue.get(prompt);
 	}
 	
 	/**
@@ -62,7 +78,7 @@ public class NPC {
 	 * @return String - description of npc
 	 */
 	public String describe(){
-		return null;
+		return description;
 	}
 	
 	/**
@@ -70,7 +86,7 @@ public class NPC {
 	 * @return String - name of npc
 	 */
 	String getName(){
-		return null;
+		return name;
 	}
 	
 	/**
@@ -78,8 +94,35 @@ public class NPC {
 	 * @param desc description of npc
 	 */
 	void setDesc(String desc){
+		description = desc;
 	}
 	
+	String getRoomName(){
+		return RoomName;
+	}
+
+	boolean goesBy(String name){
+		return this.name.equals(name);
+	}
+	
+	boolean hasDialogue(String prompt){
+		return dialogue.containsKey(prompt);
+	}
+	
+	Item getItem() {
+		return Inventory.get(0);
+	}
+	
+	boolean hasItem(){
+		return !Inventory.isEmpty();
+	}
+	
+	void removeItem(String name){
+		for(Item a: Inventory){
+			if (a.goesBy(name));
+				Inventory.remove(a);
+		}
+	}
 	/**
 	 * Adds npc line to save file, including inventory, location, status.
 	 */
