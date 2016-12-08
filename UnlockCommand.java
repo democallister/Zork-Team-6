@@ -8,13 +8,15 @@ package zork;
  */
 public class UnlockCommand extends Command {
 
-	private String key;
+	private String dir;
+        private Exit attempt;
 	
 	/**
 	 * Takes the key to be checked against an Hashtable of keys that an Exit has.
-	 * @param key String value to check against hashtable
+	 * @param dir String value to check against hashtable
 	 */
-	public UnlockCommand(String key){
+	public UnlockCommand(String dir){
+           this.dir = dir;
 	}
 	
 	/**
@@ -23,7 +25,16 @@ public class UnlockCommand extends Command {
 	 * @return String  to be printed to User
 	 */
 	public String execute() {
-		return null;
-	}
+            attempt = GameState.instance().getAdventurersCurrentRoom().getExit(dir);
+            if (attempt.getLockState() == true){
+            attempt.unlock();
+            if (attempt.getLockState() == true)
+                return "";
+            }
+            if (attempt.getLockState() == false){
+            return "You can now go " + dir + " to " + attempt.getDest().getTitle() + ".\n";
+            }
+            return "This door isn't locked.\n";
+        }
 
 }

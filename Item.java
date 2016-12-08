@@ -26,7 +26,6 @@ public class Item {
 
         // Read item weight.
         weight = Integer.valueOf(s.nextLine());
-
         // Read and parse verbs lines, as long as there are more.
         String verbLine = s.nextLine();
         while (!verbLine.equals(Dungeon.SECOND_LEVEL_DELIM)) {
@@ -36,12 +35,12 @@ public class Item {
             }
             if(verbLine.contains("[")){
             	String[] eventParts = verbLine.split("\\[");
-            	System.out.println(eventParts[0]);
+            	
             	events.put(eventParts[0], eventParts[1]);
 
             }else{
             String[] verbParts = verbLine.split(":");
-            System.out.println(verbParts[0]);
+            
             messages.put(verbParts[0],verbParts[1]);
             }
             verbLine = s.nextLine();

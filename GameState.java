@@ -30,7 +30,7 @@ public class GameState {
 
     private static GameState theInstance;
     private Dungeon dungeon;
-    private ArrayList<Item> inventory;
+    public ArrayList<Item> inventory;
     private Room adventurersCurrentRoom;
 
     static synchronized GameState instance() {
@@ -148,6 +148,16 @@ public class GameState {
         throw new Item.NoItemException();
     }
 
+    NPC getNPCInVicinityNamed(String name) throws NPC.NoNPCException{
+    	for (NPC npc : adventurersCurrentRoom.getNPCs()) {
+            if (npc.goesBy(name)) {
+                return npc;
+            }
+        }
+    	
+    	throw new NPC.NoNPCException();
+    }
+    
     Item getItemFromInventoryNamed(String name) throws Item.NoItemException {
 
         for (Item item : inventory) {

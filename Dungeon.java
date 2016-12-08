@@ -36,7 +36,8 @@ public class Dungeon {
     private String name;
     private Room entry;
     private Hashtable<String,Room> rooms;
-    private Hashtable<String,Item> items;
+    public Hashtable<String,Item> items;
+    private Hashtable<String,NPC> NPCs;
     private String filename;
 
     Dungeon(String name, Room entry) {
@@ -121,6 +122,13 @@ public class Dungeon {
             }
         } catch (Exit.NoExitException e) {  /* end of exits */ }
 
+        s.nextLine();
+        try{
+        	while(true){
+        		add(new NPC(s,this));
+        	}
+        } catch(NPC.NoNPCException e){ /* end of NPCs */}
+        
         s.close();
     }
     
@@ -129,6 +137,7 @@ public class Dungeon {
     private void init() {
         rooms = new Hashtable<String,Room>();
         items = new Hashtable<String,Item>();
+        NPCs = new Hashtable<String, NPC>();
     }
 
     /*
@@ -170,11 +179,15 @@ public class Dungeon {
     public String getFilename() { return filename; }
     public void add(Room room) { rooms.put(room.getTitle(),room); }
     public void add(Item item) { items.put(item.getPrimaryName(),item); }
+    public void add(NPC npc){ NPCs.put(npc.getName(), npc); }
 
     public Room getRoom(String roomTitle) {
         return rooms.get(roomTitle);
     }
 
+    public NPC getNPC(String npcName){
+    	return NPCs.get(npcName);
+    }
     /**
      * Get the Item object whose primary name is passed. This has nothing to
      * do with where the Adventurer might be, or what's in his/her inventory,
